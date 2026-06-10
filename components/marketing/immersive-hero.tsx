@@ -22,6 +22,7 @@ const CHAPTERS = [
 export function ImmersiveHero() {
   const stageRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<HTMLElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,11 @@ export function ImmersiveHero() {
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // Simplified scene on small screens: fewer nodes/pulses and a lower DPR
+    // cap keep the film smooth on phone GPUs. Sized once at mount — crossing
+    // the breakpoint mid-session keeps the initial density, which is fine.
+    const small = window.innerWidth < 768;
+    const dprCap = small ? 1.5 : 2;
 
     // ---------- scene ----------
     const glowTexture = () => {
@@ -65,7 +71,7 @@ export function ImmersiveHero() {
     camera.position.set(0, 0, 330);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap));
     renderer.setSize(window.innerWidth, window.innerHeight);
     stage.appendChild(renderer.domElement);
 
@@ -81,7 +87,7 @@ export function ImmersiveHero() {
     };
 
     // nodes — the people in the network
-    const N = 190;
+    const N = small ? 110 : 190;
     const nodes: THREE.Vector3[] = [];
     for (let i = 0; i < N; i++) {
       const th = 2 * Math.PI * Math.random();
@@ -158,7 +164,7 @@ export function ImmersiveHero() {
     group.add(new THREE.LineSegments(lineGeo, lineMat));
 
     // dust — depth field
-    const D = 1500;
+    const D = small ? 700 : 1500;
     const dpos = new Float32Array(D * 3);
     for (let i = 0; i < D; i++)
       dpos.set(
@@ -185,7 +191,7 @@ export function ImmersiveHero() {
     scene.add(dust);
 
     // pulses — referrals travelling the graph
-    const P = 18;
+    const P = small ? 10 : 18;
     type Pulse = { e: [number, number]; t: number; sp: number };
     const seed = (p: Pulse) => {
       p.e = edges[(Math.random() * edges.length) | 0];
@@ -229,7 +235,7 @@ export function ImmersiveHero() {
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, dprCap));
       renderer.setSize(window.innerWidth, window.innerHeight);
       onScroll();
       if (!reduced) ScrollTrigger.refresh();
@@ -256,10 +262,18 @@ export function ImmersiveHero() {
       prog += (target - prog) * 0.08;
       if (Math.abs(target - prog) < 0.0005) prog = target;
 
-      // fade the stage out once the story has fully played
+      // fade the stage AND the film chrome (nav, dots) out once the story has
+      // fully played — the fixed transparent nav otherwise collides with the
+      // light job cards that follow
       const past = window.scrollY - (story.offsetHeight - window.innerHeight);
       const fade = Math.min(1, Math.max(0, 1 - past / (window.innerHeight * 0.6)));
       stage.style.opacity = String(fade);
+      for (const el of [navRef.current, dotsRef.current]) {
+        if (el) {
+          el.style.opacity = String(fade);
+          el.style.pointerEvents = fade < 0.5 ? "none" : "";
+        }
+      }
       if (fade <= 0.01) return; // parked below the story — skip GPU work
 
       const ease = prog * prog * (3 - 2 * prog);
@@ -346,15 +360,18 @@ export function ImmersiveHero() {
         gsap.to(rupee, {
           v: PAYOUT,
           ease: "none",
+          // on the tween, not the ScrollTrigger: with a smoothed scrub the
+          // value keeps easing after the last scroll event, and only tween
+          // ticks see those frames
+          onUpdate: () => {
+            if (rupeeRef.current)
+              rupeeRef.current.textContent = inr(Math.round(rupee.v));
+          },
           scrollTrigger: {
             trigger: "#ch-payoff",
             start: "top 75%",
             end: "center center",
             scrub: 0.5,
-            onUpdate: () => {
-              if (rupeeRef.current)
-                rupeeRef.current.textContent = inr(Math.round(rupee.v));
-            },
           },
         }),
       );
@@ -416,7 +433,10 @@ export function ImmersiveHero() {
       />
 
       {/* nav */}
-      <nav className="fixed inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-5 sm:px-10 [&_span]:text-slate-50">
+      <nav
+        ref={navRef}
+        className="fixed inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-5 sm:px-10 [&_span]:text-slate-50"
+      >
         <Logo />
         <Link
           href="/signup"
@@ -551,7 +571,7 @@ export function ImmersiveHero() {
             <h2 className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
               She joins. The node ignites.
             </h2>
-            <p className="mt-3 bg-gradient-to-r from-emerald-400 to-amber-400 bg-clip-text font-display text-7xl font-bold tracking-tight text-transparent sm:text-9xl">
+            <p className="mt-3 bg-gradient-to-r from-emerald-400 to-amber-400 bg-clip-text font-display text-7xl font-bold tracking-normal text-transparent sm:text-9xl">
               <span ref={rupeeRef}>₹0</span>
             </p>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-slate-400">

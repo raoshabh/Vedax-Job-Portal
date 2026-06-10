@@ -168,7 +168,7 @@ export const jobs: Job[] = [
     id: "j-103",
     companyId: "stackline",
     title: "Staff Frontend Engineer",
-    location: "Remote (India)",
+    location: "India",
     mode: "Remote",
     type: "Full-time",
     salaryMin: 45,
