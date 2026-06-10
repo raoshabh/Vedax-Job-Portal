@@ -29,7 +29,8 @@ No environment variables needed — the app runs entirely on a typed mock-data l
 ### Marketing (public)
 | Route | Screen |
 |---|---|
-| `/` | Landing — hero, how it works, live bounties, features, company band, testimonials, FAQ |
+| `/` | **Immersive landing** — scroll-scrubbed 3D "referral constellation" (Three.js + GSAP ScrollTrigger): 5 cinematic chapters, payout counter, live bounties, CTA. Honors `prefers-reduced-motion` |
+| `/classic` | Classic landing — hero, how it works, live bounties, features, company band, testimonials, FAQ |
 | `/jobs` | Public job board with bounty amounts |
 | `/jobs/[id]` | Job detail + bounty sidebar (escrow guarantee, refer/apply CTAs) |
 | `/pricing` | Company pricing — pay-per-hire (20%), Growth (₹49,999/mo + 12%), Enterprise |
