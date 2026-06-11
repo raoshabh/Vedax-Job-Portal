@@ -1,0 +1,105 @@
+// Postgres-ready schema. Local dev runs SQLite (no Docker/Homebrew on this
+// machine); for production switch provider to "postgresql" and point
+// DATABASE_URL at Neon/Supabase — no model changes needed (money is integer
+// paise, no SQLite-specific types, string-encoded enums).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  role         String // "referrer" | "company" | "candidate" | "admin"
+  createdAt    DateTime   @default(now())
+  company      Company?
+  referrals    Referral[]
+}
+
+model Company {
+  id      String  @id @default(cuid())
+  name    String
+  slug    String  @unique
+  ownerId String  @unique
+  owner   User    @relation(fields: [ownerId], references: [id])
+  jobs    Job[]
+}
+
+model Job {
+  id          String     @id @default(cuid())
+  companyId   String
+  company     Company    @relation(fields: [companyId], references: [id])
+  title       String
+  bountyPaise Int // full bounty in paise
+  field       String
+  cutoff      Int
+  status      String     @default("Open")
+  createdAt   DateTime   @default(now())
+  referrals   Referral[]
+}
+
+model Referral {
+  id             String    @id @default(cuid())
+  jobId          String
+  job            Job       @relation(fields: [jobId], references: [id])
+  referrerId     String
+  referrer       User      @relation(fields: [referrerId], references: [id])
+  candidateName  String
+  candidateEmail String
+  status         String    @default("Submitted")
+  claimExpiresAt DateTime?
+  createdAt      DateTime  @default(now())
+  payouts        Payout[]
+
+  @@unique([jobId, candidateEmail]) // claim windows: one live referral per candidate per role
+}
+
+// ---- double-entry ledger ----
+
+model LedgerAccount {
+  id      String        @id @default(cuid())
+  kind    String // "COMPANY_ESCROW" | "REFERRER" | "PLATFORM_REVENUE" | "EXTERNAL"
+  ownerId String? // polymorphic by kind: user id for REFERRER, company id for COMPANY_ESCROW
+  entries LedgerEntry[]
+
+  @@unique([kind, ownerId])
+}
+
+model LedgerTransaction {
+  id        String        @id @default(cuid())
+  idemKey   String        @unique // idempotency: same key can never post twice
+  kind      String // "FUND" | "MILESTONE_HIRE" | "MILESTONE_90D" | "REFUND" | "PENALTY"
+  refType   String?
+  refId     String?
+  createdAt DateTime      @default(now())
+  entries   LedgerEntry[]
+}
+
+model LedgerEntry {
+  id            String            @id @default(cuid())
+  transactionId String
+  transaction   LedgerTransaction @relation(fields: [transactionId], references: [id])
+  accountId     String
+  account       LedgerAccount     @relation(fields: [accountId], references: [id])
+  amountPaise   Int // signed; every transaction's entries sum to zero
+  createdAt     DateTime          @default(now())
+}
+
+model Payout {
+  id            String   @id @default(cuid())
+  referralId    String
+  referral      Referral @relation(fields: [referralId], references: [id])
+  recipientId   String
+  milestone     String // "HIRE" | "RETENTION_90D"
+  amountPaise   Int
+  status        String   @default("released") // released | settled
+  transactionId String
+  createdAt     DateTime @default(now())
+}
