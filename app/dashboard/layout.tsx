@@ -4,9 +4,11 @@ import { demoReferrer } from "@/lib/data";
 const nav: NavItem[] = [
   { href: "/dashboard", label: "Overview", icon: "overview" },
   { href: "/dashboard/jobs", label: "Browse jobs", icon: "jobs" },
+  { href: "/dashboard/network", label: "Network x-ray", icon: "network" },
   { href: "/dashboard/referrals", label: "My referrals", icon: "referrals" },
   { href: "/dashboard/refer", label: "New referral", icon: "refer" },
   { href: "/dashboard/earnings", label: "Earnings", icon: "earnings" },
+  { href: "/dashboard/tier", label: "Tier & perks", icon: "tier" },
   { href: "/dashboard/settings", label: "Settings", icon: "settings" },
 ];
 

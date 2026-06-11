@@ -58,7 +58,7 @@ export default function DashboardPage() {
           <StatCard
             label="Lifetime earnings"
             value={inr(lifetime)}
-            hint="Across 2 successful hires"
+            hint="2 paid out · 7 verified hires total"
             icon={HandCoins}
             accent="emerald"
           />

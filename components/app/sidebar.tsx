@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
   Briefcase,
   HandCoins,
   LayoutDashboard,
   LogOut,
   Plug,
+  Radar,
   Settings,
+  Trophy,
   UserPlus,
   Users,
   Wallet,
@@ -26,6 +29,9 @@ const icons = {
   settings: Settings,
   billing: Wallet,
   integrations: Plug,
+  network: Radar,
+  tier: Trophy,
+  analytics: BarChart3,
 } as const;
 
 export interface NavItem {
@@ -84,7 +90,9 @@ export function Sidebar({ items, user, badgeLabel }: SidebarProps) {
             <p className="truncate text-sm font-semibold text-slate-900">
               {user.name}
             </p>
-            <p className="truncate text-xs text-slate-500">{user.title}</p>
+            <p className="truncate text-xs text-slate-500" title={user.title}>
+              {user.title}
+            </p>
           </div>
           <Link href="/" aria-label="Log out">
             <LogOut className="h-4 w-4 text-slate-400 transition hover:text-slate-700" />

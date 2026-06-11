@@ -95,7 +95,7 @@ const testimonials = [
 const faqs = [
   {
     q: "When exactly do I get paid?",
-    a: "Your payout is 80% of the job's bounty, released in two milestones: half when your candidate signs and joins, and the other half when they complete 90 days. Both payouts go to your UPI ID or bank account within 24 hours of release.",
+    a: "Your payout starts at 80% of the job's bounty — rising to 85% at higher referrer tiers — released in two milestones: half when your candidate signs and joins, and the other half when they complete 90 days. Both payouts go to your UPI ID or bank account within 24 hours of release.",
   },
   {
     q: "What does Refora charge?",

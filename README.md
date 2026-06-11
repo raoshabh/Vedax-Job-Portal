@@ -8,7 +8,7 @@ People constantly refer friends and ex-colleagues into companies — and get not
 - **Referrers** browse bounty-backed roles, refer people they trust, and track them through the hiring pipeline.
 - **Candidates** get a warm intro instead of a cold application, plus full visibility into where they stand.
 
-When a referred candidate is **hired**, the referrer earns **80% of the bounty** — 50% on joining, 50% after the hire completes 90 days. Refora keeps 20%. If the hire leaves before 90 days, the unreleased half returns to the company's escrow, keeping incentives honest for everyone.
+When a referred candidate is **hired**, the referrer earns **80% of the bounty** (rising to 85% at higher referrer tiers) — 50% on joining, 50% after the hire completes 90 days. Refora keeps the rest. If the hire leaves before 90 days, the unreleased half returns to the company's escrow, keeping incentives honest for everyone.
 
 ## Running it
 
