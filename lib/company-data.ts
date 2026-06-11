@@ -34,8 +34,11 @@ export const pipelineCandidates: PipelineCandidate[] = [
     daysInStage: 2,
   },
   {
+    // (Nikhil Bansal was rejected from this pipeline 24 days ago — he now
+    // appears only in the joiner-match monitor and dispute queue as a
+    // detected hidden hire, not on the active board.)
     id: "c-3",
-    name: "Nikhil Bansal",
+    name: "Imran Shaikh",
     role: "SDE-3 @ Amazon",
     jobTitle: "Senior Backend Engineer",
     referrer: "Sandeep Rao",

@@ -1,13 +1,24 @@
 import {
   AlertTriangle,
   Building2,
+  Gavel,
   HandCoins,
   TrendingUp,
   Users,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { StatCard } from "@/components/app/stat-card";
+import { disputes, type EvidenceState } from "@/lib/integrations";
 import { inr } from "@/lib/utils";
+
+const evidenceStyles: Record<EvidenceState, string> = {
+  confirmed: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  pending: "bg-amber-50 text-amber-800 ring-amber-200",
+  requested: "bg-blue-50 text-blue-700 ring-blue-200",
+  mismatch: "bg-rose-50 text-rose-700 ring-rose-200",
+  applies: "bg-violet-50 text-violet-700 ring-violet-200",
+  unavailable: "bg-slate-100 text-slate-500 ring-slate-200",
+};
 
 const pendingPayouts = [
   {
@@ -110,6 +121,69 @@ export default function AdminPage() {
             icon={Building2}
             accent="amber"
           />
+        </div>
+
+        {/* Hire verification & disputes */}
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between p-6 pb-4">
+            <h2 className="flex items-center gap-2 font-bold text-slate-900">
+              <Gavel className="h-4 w-4 text-indigo-600" />
+              Hire verification & disputes
+            </h2>
+            <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700 ring-1 ring-inset ring-rose-200">
+              {disputes.length} open
+            </span>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {disputes.map((d) => (
+              <div key={d.id} className="px-6 py-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-slate-900">
+                      {d.candidate}
+                    </p>
+                    <p className="mt-0.5 text-sm text-slate-600">{d.claim}</p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      {d.filed} · referrer: {d.referrer}
+                    </p>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ring-1 ring-inset ${
+                      d.status.startsWith("Verified")
+                        ? "bg-rose-50 text-rose-700 ring-rose-200"
+                        : "bg-amber-50 text-amber-800 ring-amber-200"
+                    }`}
+                  >
+                    {d.status}
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {d.evidence.map((ev) => (
+                    <span
+                      key={ev.label}
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset ${evidenceStyles[ev.state]}`}
+                    >
+                      {ev.label}: {ev.state}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {d.actions.map((a, i) => (
+                    <button
+                      key={a}
+                      className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+                        i === 0
+                          ? "bg-slate-900 text-white hover:bg-slate-700"
+                          : "border border-slate-300 text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="grid gap-6 xl:grid-cols-2">

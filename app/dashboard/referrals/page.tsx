@@ -78,6 +78,11 @@ export default function ReferralsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <StatusBadge status={r.status} />
+                        {r.status === "Rejected" && (
+                          <button className="mt-1.5 block text-xs font-semibold text-rose-600 underline-offset-2 hover:underline">
+                            Report hidden hire
+                          </button>
+                        )}
                       </td>
                       <td className="max-w-xs px-6 py-4">
                         <p className="truncate text-xs text-slate-500">

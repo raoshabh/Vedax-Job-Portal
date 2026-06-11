@@ -53,6 +53,9 @@ export function JobCard({
       </div>
 
       <div className="mt-3 flex flex-wrap gap-1.5">
+        <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-700">
+          Prescreened ≥{job.passportCutoff}
+        </span>
         {job.skills.map((skill) => (
           <span
             key={skill}

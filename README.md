@@ -31,6 +31,7 @@ No environment variables needed — the app runs entirely on a typed mock-data l
 |---|---|
 | `/` | **Immersive landing** — scroll-scrubbed 3D "referral constellation" (Three.js + GSAP ScrollTrigger): 5 cinematic chapters, payout counter, live bounties, CTA. Honors `prefers-reduced-motion` |
 | `/classic` | Classic landing — hero, how it works, live bounties, features, company band, testimonials, FAQ |
+| `/assessments` | Skill Passport — prescreening catalog + interactive sample test player that issues a scored passport |
 | `/jobs` | Public job board with bounty amounts |
 | `/jobs/[id]` | Job detail + bounty sidebar (escrow guarantee, refer/apply CTAs) |
 | `/pricing` | Company pricing — pay-per-hire (20%), Growth (₹49,999/mo + 12%), Enterprise |
@@ -54,13 +55,14 @@ No environment variables needed — the app runs entirely on a typed mock-data l
 | `/company/jobs/new` | Post a role — bounty slider with live fee/escrow breakdown |
 | `/company/candidates` | Kanban pipeline (Submitted → Screening → Interviewing → Offer → Hired) |
 | `/company/billing` | Escrow funding, releases, refunds, plan management |
+| `/company/integrations` | HRMS/ATS connectors (Keka, Darwinbox, greytHR, Greenhouse…) + joiner-match monitor that auto-verifies hires and flags hidden ones |
 | `/company/settings` | Company profile & team access |
 
 ### Other
 | Route | Screen |
 |---|---|
 | `/candidate` | Candidate tracker — referral journey timeline, vouch note, next interview, consent controls |
-| `/admin` | Platform ops — GMV/revenue, payout release queue, trust & safety flags, top referrers |
+| `/admin` | Platform ops — GMV/revenue, hire-verification & dispute queue (HRMS match, EPFO checks, candidate attestation), payout releases, trust & safety flags, top referrers |
 
 ## Business model
 
@@ -73,6 +75,9 @@ Trust mechanics that make the marketplace work:
 - **Milestone payouts** — 50/50 split across joining and 90-day retention aligns referrers with quality, not volume.
 - **Trust score** — referrers build a 0–100 score; spam/fake referrals tank it, quality referrals unlock premium bounties.
 - **Candidate consent** — nothing is shared with a company until the candidate explicitly opts in.
+- **Skill Passport prescreening** — one proctored, field-specific test issues a reusable scored passport; referrals only reach a company once the candidate clears the role's cutoff.
+- **HRMS-verified hires** — joiner/exit webhooks (Keka, Darwinbox, greytHR…) match new employees against referrals from the last 12 months: milestones release automatically, hidden hires get invoiced, and retention is read from payroll instead of company say-so. Integrated companies pay 12% instead of 20%.
+- **Dispute & verification queue** — referrer reports, attestation mismatches and HRMS flags land in an admin queue with EPFO employment checks and a 12-month ownership clause behind them.
 
 ## Architecture
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  BadgeCheck,
   CalendarCheck,
   Check,
   CircleDot,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { companyForJob, demoCandidate, jobById, referrals } from "@/lib/data";
+import { assessmentById, findPassport } from "@/lib/assessments";
 import { lpa } from "@/lib/utils";
 
 const stages = [
@@ -47,6 +49,7 @@ export default function CandidatePage() {
   const referral = referrals.find((r) => r.id === demoCandidate.referralId)!;
   const job = jobById(referral.jobId)!;
   const company = companyForJob(referral.jobId)!;
+  const passport = findPassport(demoCandidate.email);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -101,6 +104,51 @@ export default function CandidatePage() {
             </div>
           </div>
         </div>
+
+        {/* Skill passport */}
+        {passport && (
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="flex flex-wrap items-end justify-between gap-4 bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-5 text-white">
+              <div>
+                <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-white/80">
+                  <BadgeCheck className="h-4 w-4" /> Skill passport
+                </p>
+                <p className="mt-1.5 text-xl font-bold">
+                  {assessmentById(passport.fieldId).field}
+                </p>
+                <p className="mt-0.5 text-xs text-white/75">
+                  {passport.percentile}th percentile · valid till{" "}
+                  {passport.expiresOn}
+                </p>
+              </div>
+              <p className="text-5xl font-extrabold tracking-tight">
+                {passport.score}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4">
+              <div className="flex flex-wrap gap-2">
+                {passport.badges.map((b) => (
+                  <span
+                    key={b}
+                    className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-200"
+                  >
+                    {b}
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs text-slate-500">
+                This score travels with you — it cleared the {job.title} cutoff
+                of {job.passportCutoff} automatically.{" "}
+                <Link
+                  href="/assessments"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                >
+                  Browse assessments
+                </Link>
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Timeline */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">

@@ -145,12 +145,29 @@ export default async function JobDetailPage({
                 Apply yourself
               </Link>
 
-              <div className="mt-6 flex items-start gap-2.5 rounded-xl bg-slate-50 p-4">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                <p className="text-xs leading-5 text-slate-600">
-                  This bounty is fully funded and held in Refora escrow. Payout
-                  is guaranteed when your candidate meets the milestones.
-                </p>
+              <div className="mt-6 space-y-3">
+                <div className="flex items-start gap-2.5 rounded-xl bg-slate-50 p-4">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                  <p className="text-xs leading-5 text-slate-600">
+                    This bounty is fully funded and held in Refora escrow.
+                    Payout is guaranteed when your candidate meets the
+                    milestones.
+                  </p>
+                </div>
+                <div className="flex items-start gap-2.5 rounded-xl bg-indigo-50/60 p-4">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-indigo-600" />
+                  <p className="text-xs leading-5 text-slate-600">
+                    Prescreening: candidates need a{" "}
+                    <Link
+                      href="/assessments"
+                      className="font-semibold text-indigo-600 underline-offset-2 hover:underline"
+                    >
+                      Skill Passport
+                    </Link>{" "}
+                    score of {job.passportCutoff}+ in this field before the
+                    referral reaches {company.name}.
+                  </p>
+                </div>
               </div>
             </div>
           </aside>

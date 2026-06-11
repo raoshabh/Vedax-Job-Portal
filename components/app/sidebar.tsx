@@ -7,6 +7,7 @@ import {
   HandCoins,
   LayoutDashboard,
   LogOut,
+  Plug,
   Settings,
   UserPlus,
   Users,
@@ -24,6 +25,7 @@ const icons = {
   earnings: HandCoins,
   settings: Settings,
   billing: Wallet,
+  integrations: Plug,
 } as const;
 
 export interface NavItem {

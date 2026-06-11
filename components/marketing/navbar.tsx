@@ -7,9 +7,9 @@ import { Logo } from "@/components/logo";
 
 const links = [
   { href: "/jobs", label: "Browse jobs" },
+  { href: "/assessments", label: "Assessments" },
   { href: "/pricing", label: "For companies" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#faq", label: "FAQ" },
+  { href: "/classic#faq", label: "FAQ" },
 ];
 
 export function Navbar() {

@@ -9,6 +9,16 @@ export type ReferralStatus =
 
 export type JobStatus = "Open" | "Paused" | "Closed";
 
+export type AssessmentFieldId =
+  | "backend"
+  | "frontend"
+  | "design"
+  | "data"
+  | "management"
+  | "marketing"
+  | "security"
+  | "sales-cs";
+
 export interface Company {
   id: string;
   name: string;
@@ -35,6 +45,10 @@ export interface Job {
   status: JobStatus;
   description: string;
   requirements: string[];
+  // prescreening gate: referrals only reach the company once the candidate
+  // holds a valid Skill Passport in this field at or above the cutoff
+  assessmentField: AssessmentFieldId;
+  passportCutoff: number;
 }
 
 export interface Referral {
@@ -141,6 +155,8 @@ export const jobs: Job[] = [
       "Strong grasp of idempotency, ledgers and reconciliation",
       "Comfort owning services end-to-end (design → on-call)",
     ],
+    assessmentField: "backend",
+    passportCutoff: 70,
   },
   {
     id: "j-102",
@@ -163,6 +179,8 @@ export const jobs: Job[] = [
       "A portfolio showing shipped, measurable work",
       "Experience partnering directly with engineers",
     ],
+    assessmentField: "design",
+    passportCutoff: 65,
   },
   {
     id: "j-103",
@@ -185,6 +203,8 @@ export const jobs: Job[] = [
       "Proven performance work on data-dense UIs",
       "Experience leading without authority across teams",
     ],
+    assessmentField: "frontend",
+    passportCutoff: 75,
   },
   {
     id: "j-104",
@@ -207,6 +227,8 @@ export const jobs: Job[] = [
       "Strong statistics fundamentals",
       "Bonus: prior healthcare or regulated-industry work",
     ],
+    assessmentField: "data",
+    passportCutoff: 70,
   },
   {
     id: "j-105",
@@ -229,6 +251,8 @@ export const jobs: Job[] = [
       "Ran platform/infra teams at a product company",
       "Track record of growing senior engineers",
     ],
+    assessmentField: "management",
+    passportCutoff: 65,
   },
   {
     id: "j-106",
@@ -251,6 +275,8 @@ export const jobs: Job[] = [
       "Hands-on with attribution and experimentation",
       "Has owned a revenue or pipeline number before",
     ],
+    assessmentField: "marketing",
+    passportCutoff: 65,
   },
   {
     id: "j-107",
@@ -273,6 +299,8 @@ export const jobs: Job[] = [
       "Can read and write code, not just review reports",
       "Experience with fintech compliance a plus",
     ],
+    assessmentField: "security",
+    passportCutoff: 70,
   },
   {
     id: "j-108",
@@ -294,6 +322,8 @@ export const jobs: Job[] = [
       "3+ years in customer success or account management",
       "Comfortable with data and QBR storytelling",
     ],
+    assessmentField: "sales-cs",
+    passportCutoff: 60,
   },
 ];
 
